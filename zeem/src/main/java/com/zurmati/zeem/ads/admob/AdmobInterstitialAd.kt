@@ -10,6 +10,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.zurmati.zeem.ads.managers.AdsManager
 import com.zurmati.zeem.enums.InterstitialDismiss
+import com.zurmati.zeem.extensions.logEvent
 
 class AdmobInterstitialAd {
     private var mInterstitialAd: InterstitialAd? = null
@@ -56,7 +57,7 @@ class AdmobInterstitialAd {
     ) {
         mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdClicked() {
-
+                logEvent("InterstitialAdClicked")
             }
 
             override fun onAdDismissedFullScreenContent() {
@@ -68,11 +69,15 @@ class AdmobInterstitialAd {
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 super.onAdFailedToShowFullScreenContent(p0)
                 mInterstitialAd = null
+                listener.invoke(false)
             }
 
             override fun onAdImpression() {
                 if (dismissType == InterstitialDismiss.ON_IMPRESSION)
                     listener.invoke(true)
+
+                logEvent("InterstitialAdImpression")
+
             }
 
             override fun onAdShowedFullScreenContent() {

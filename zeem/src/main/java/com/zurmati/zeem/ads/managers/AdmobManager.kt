@@ -16,6 +16,10 @@ class AdmobManager {
 
     fun isNativeAdAvailable(): Boolean = nativeAd1.isAdAvailable() || nativeAd2.isAdAvailable()
 
+    fun loadNativeAds(context: Context, listener: (Boolean) -> Unit = {}) {
+        nativeAd1.loadFreshNative(context, AdsManager.adData.nativeId, listener)
+    }
+
     fun showNativeAd(
         context: Context,
         container: FrameLayout,
@@ -67,6 +71,8 @@ class AdmobManager {
             interstitialAd2.loadFreshInterstitial(activity, AdsManager.adData.interstitialId)
         }
     }
+
+
 
     fun checkInterstitialInstances(context: Context) {
         if (!interstitialAd1.isAdAvailable())

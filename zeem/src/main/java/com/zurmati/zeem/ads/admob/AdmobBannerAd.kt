@@ -9,6 +9,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.zurmati.zeem.ads.managers.AdsManager
+import com.zurmati.zeem.extensions.logEvent
 
 class AdmobBannerAd {
     private var bannerCounter = 0
@@ -41,7 +42,7 @@ class AdmobBannerAd {
 
         adView.adListener = object : AdListener() {
             override fun onAdClicked() {
-
+                logEvent("BannerAdClicked")
             }
 
             override fun onAdClosed() {
@@ -53,7 +54,7 @@ class AdmobBannerAd {
             }
 
             override fun onAdImpression() {
-
+                logEvent("BannerAdImpression")
             }
 
             override fun onAdLoaded() {

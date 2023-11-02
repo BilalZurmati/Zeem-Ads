@@ -17,6 +17,7 @@ import com.google.android.gms.ads.nativead.NativeAdView
 import com.zurmati.zeem.R
 import com.zurmati.zeem.ads.managers.AdsManager
 import com.zurmati.zeem.enums.Layout
+import com.zurmati.zeem.extensions.logEvent
 
 class AdmobNativeAd {
 
@@ -44,6 +45,17 @@ class AdmobNativeAd {
                 nativeLoading = false
             }
             .withAdListener(object : AdListener() {
+
+                override fun onAdClicked() {
+                    super.onAdClicked()
+                    logEvent("NativeAdClicked")
+                }
+
+                override fun onAdImpression() {
+                    super.onAdImpression()
+                    logEvent("NativeAdImpression")
+                }
+
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     listener.invoke(false)
                     nativeLoading = false
@@ -64,57 +76,92 @@ class AdmobNativeAd {
         layout: Layout,
         inflated: (Boolean) -> Unit = {}
     ) {
-        val adView = when (layout) {
+        val adLayout = when (layout) {
             Layout.FULL -> {
                 LayoutInflater.from(context).inflate(R.layout.admob_native_full, null)
-                        as NativeAdView
             }
 
             Layout.SIDE_MEDIA -> {
                 LayoutInflater.from(context).inflate(R.layout.admob_native_side_media, null)
-                        as NativeAdView
             }
 
             Layout.NO_MEDIA -> {
                 LayoutInflater.from(context).inflate(R.layout.admob_native_no_media, null)
-                        as NativeAdView
             }
 
             Layout.NO_ICON -> {
                 LayoutInflater.from(context).inflate(R.layout.admob_native_no_icon, null)
-                        as NativeAdView
             }
 
 
         }
 
+        val adView = if (layout == Layout.NO_MEDIA)
+            adLayout as NativeAdView
+        else
+            adLayout.findViewById(R.id.ad_view) as NativeAdView
 
-        // Set the media view.
-        adView.mediaView = adView.findViewById(R.id.ad_media)
+
+        if (layout == Layout.FULL) {
+            // Set the media view.
+            adView.mediaView = adView.findViewById(R.id.ad_media)
+
+
+            adView.bodyView = adView.findViewById(R.id.ad_body)
+            adView.priceView = adView.findViewById(R.id.ad_price)
+            adView.starRatingView = adView.findViewById(R.id.ad_stars)
+            adView.storeView = adView.findViewById(R.id.ad_store)
+            adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
+
+        }
+
 
         // Set other ad assets.
         adView.headlineView = adView.findViewById(R.id.ad_headline)
-        adView.bodyView = adView.findViewById(R.id.ad_body)
         adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
         adView.iconView = adView.findViewById(R.id.ad_app_icon)
-        adView.priceView = adView.findViewById(R.id.ad_price)
-        adView.starRatingView = adView.findViewById(R.id.ad_stars)
-        adView.storeView = adView.findViewById(R.id.ad_store)
-        adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
+
 
         // The headline and media content are guaranteed to be in every UnifiedNativeAd.
         (adView.headlineView as TextView).text = nativeAd!!.headline
 
-        adView.mediaView?.let {
-            it.mediaContent = nativeAd!!.mediaContent
+
+        if (layout == Layout.FULL) {
+
+            adView.mediaView?.let {
+                it.mediaContent = nativeAd!!.mediaContent
+            }
+
+
+            // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+            // check before trying to display them.
+            nativeAd!!.body?.let {
+                (adView.bodyView as TextView).text = it
+            }
+
+            nativeAd!!.price?.let {
+                (adView.priceView as TextView).text = it
+            } ?: {
+                adView.priceView!!.visibility = View.INVISIBLE
+            }
+
+            nativeAd!!.store?.let {
+                (adView.storeView as TextView).text = it
+            } ?: {
+                adView.storeView!!.visibility = View.INVISIBLE
+            }
+
+            nativeAd!!.starRating?.let {
+                (adView.starRatingView as RatingBar).rating = it.toFloat()
+            }
+
+            nativeAd!!.advertiser.let {
+                (adView.advertiserView as TextView).text = it
+            }
+
         }
 
 
-        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
-        // check before trying to display them.
-        nativeAd!!.body?.let {
-            (adView.bodyView as TextView).text = it
-        }
 
 
         nativeAd!!.callToAction?.let {
@@ -127,31 +174,16 @@ class AdmobNativeAd {
             )
         }
 
-        nativeAd!!.price?.let {
-            (adView.priceView as TextView).text = it
-        } ?: {
-            adView.priceView!!.visibility = View.INVISIBLE
-        }
-
-        nativeAd!!.store?.let {
-            (adView.storeView as TextView).text = it
-        } ?: {
-            adView.storeView!!.visibility = View.INVISIBLE
-        }
-
-        nativeAd!!.starRating?.let {
-            (adView.starRatingView as RatingBar).rating = it.toFloat()
-        }
-
-        nativeAd!!.advertiser.let {
-            (adView.advertiserView as TextView).text = it
-        }
 
         // This method tells the Google Mobile Ads SDK that you have finished populating your
         // native ad view with this native ad.
         adView.setNativeAd(nativeAd!!)
 
-        container.addView(adView)
+//        adView.parent?.let {
+//            (it as ViewGroup).removeAllViews()
+//        }
+
+        container.addView(adLayout)
 
         inflated.invoke(true)
     }
