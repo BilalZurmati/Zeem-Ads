@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.FrameLayout
 import com.google.android.gms.ads.MobileAds
+import com.zurmati.zeem.billing.GoogleBilling
 import com.zurmati.zeem.enums.InterstitialDismiss
 import com.zurmati.zeem.enums.Layout
 import com.zurmati.zeem.interfaces.IAdEventListener
@@ -18,6 +19,8 @@ object AdsManager {
     private var landingInterstitialFlag = true
 
     fun initAdManager(activity: Activity, listener: IAdEventListener?) {
+        if (GoogleBilling.isPremiumUser())
+            return
 
         MobileAds.initialize(activity.applicationContext) {
             admobManager.loadNativeAds(activity) {

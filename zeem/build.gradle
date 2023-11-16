@@ -49,5 +49,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
 
-    implementation 'com.google.android.gms:play-services-ads:22.2.0'
+    implementation 'com.google.android.gms:play-services-ads:22.5.0'
+
+    implementation("com.github.AliAsadi:PowerPreference:2.1.1")
+
+    implementation("com.android.billingclient:billing-ktx:6.0.1") //Google Billing API
 }

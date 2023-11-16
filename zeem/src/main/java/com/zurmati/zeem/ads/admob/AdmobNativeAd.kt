@@ -16,6 +16,7 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.zurmati.zeem.R
 import com.zurmati.zeem.ads.managers.AdsManager
+import com.zurmati.zeem.billing.GoogleBilling
 import com.zurmati.zeem.enums.Layout
 import com.zurmati.zeem.extensions.logEvent
 
@@ -30,7 +31,7 @@ class AdmobNativeAd {
 
 
     fun loadFreshNative(context: Context, adId: String, listener: (Boolean) -> Unit = {}) {
-        if (nativeLoading || nativeCounter >= AdsManager.adData.nativeRequest)
+        if (GoogleBilling.isPremiumUser() || nativeLoading || nativeCounter >= AdsManager.adData.nativeRequest)
             return
 
         loadAd(context, adId, listener)
@@ -54,6 +55,7 @@ class AdmobNativeAd {
                 override fun onAdImpression() {
                     super.onAdImpression()
                     logEvent("NativeAdImpression")
+                    nativeAd = null
                 }
 
                 override fun onAdFailedToLoad(adError: LoadAdError) {

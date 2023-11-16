@@ -9,6 +9,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.zurmati.zeem.ads.managers.AdsManager
+import com.zurmati.zeem.billing.GoogleBilling
 import com.zurmati.zeem.enums.InterstitialDismiss
 import com.zurmati.zeem.extensions.logEvent
 
@@ -21,7 +22,7 @@ class AdmobInterstitialAd {
 
 
     fun loadFreshInterstitial(context: Context, adId: String, listener: (Boolean) -> Unit = {}) {
-        if (interstitialAdLoading || interstitialCounter >= AdsManager.adData.interstitialRequests)
+        if (GoogleBilling.isPremiumUser() || interstitialAdLoading || interstitialCounter >= AdsManager.adData.interstitialRequests)
             return
 
         loadAd(context, adId, listener)
@@ -68,7 +69,6 @@ class AdmobInterstitialAd {
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 super.onAdFailedToShowFullScreenContent(p0)
-                mInterstitialAd = null
                 listener.invoke(false)
             }
 

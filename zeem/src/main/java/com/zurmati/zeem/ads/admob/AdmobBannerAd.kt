@@ -9,6 +9,7 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.zurmati.zeem.ads.managers.AdsManager
+import com.zurmati.zeem.billing.GoogleBilling
 import com.zurmati.zeem.extensions.logEvent
 
 class AdmobBannerAd {
@@ -23,7 +24,7 @@ class AdmobBannerAd {
         container: FrameLayout,
         listener: (Boolean) -> Unit = {}
     ) {
-        if (bannerCounter >= AdsManager.adData.BannerRequests)
+        if (GoogleBilling.isPremiumUser() || bannerCounter >= AdsManager.adData.BannerRequests)
             return
 
         loadAd(context, adId, container, listener)
