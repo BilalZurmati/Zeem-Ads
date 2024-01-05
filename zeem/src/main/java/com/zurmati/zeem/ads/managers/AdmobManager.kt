@@ -3,6 +3,7 @@ package com.zurmati.zeem.ads.managers
 import android.app.Activity
 import android.content.Context
 import android.widget.FrameLayout
+import com.google.android.gms.ads.AdSize
 import com.zurmati.zeem.ads.admob.AdmobBannerAd
 import com.zurmati.zeem.ads.admob.AdmobInterstitialAd
 import com.zurmati.zeem.ads.admob.AdmobNativeAd
@@ -73,7 +74,6 @@ class AdmobManager {
     }
 
 
-
     fun checkInterstitialInstances(context: Context) {
         if (!interstitialAd1.isAdAvailable())
             interstitialAd1.loadFreshInterstitial(context, AdsManager.adData.interstitialId)
@@ -85,8 +85,13 @@ class AdmobManager {
 
     private var bannerAd: AdmobBannerAd = AdmobBannerAd()
 
-    fun loadBannerAd(context: Context, container: FrameLayout, listener: (Boolean) -> Unit = {}) {
-        bannerAd.loadFreshBanner(context, AdsManager.adData.bannerId, container, listener)
+    fun loadBannerAd(
+        activity: Activity,
+        container: FrameLayout,
+        bannerSize: AdSize = AdSize.BANNER,
+        listener: (Boolean) -> Unit = {}
+    ) {
+        bannerAd.loadFreshBanner(activity, AdsManager.adData.bannerId, container,bannerSize, listener)
     }
 
 }

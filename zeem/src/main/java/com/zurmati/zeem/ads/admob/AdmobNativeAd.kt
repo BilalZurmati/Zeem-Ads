@@ -98,10 +98,8 @@ class AdmobNativeAd {
 
         }
 
-        val adView = if (layout == Layout.NO_MEDIA)
-            adLayout as NativeAdView
-        else
-            adLayout.findViewById(R.id.ad_view) as NativeAdView
+        val adView = adLayout.findViewById(R.id.ad_view) as NativeAdView
+
 
 
         if (layout == Layout.FULL) {

@@ -1,6 +1,8 @@
 package com.zurmati.zeem.ads.admob
 
+import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import com.google.android.gms.ads.AdListener
@@ -19,26 +21,29 @@ class AdmobBannerAd {
 
 
     fun loadFreshBanner(
-        context: Context,
+        activity: Activity,
         adId: String,
         container: FrameLayout,
+        adSize: AdSize,
         listener: (Boolean) -> Unit = {}
     ) {
         if (GoogleBilling.isPremiumUser() || bannerCounter >= AdsManager.adData.BannerRequests)
             return
 
-        loadAd(context, adId, container, listener)
+        loadAd(activity, adId, container, adSize, listener)
     }
 
     private fun loadAd(
-        context: Context,
+        activity: Activity,
         adId: String,
         container: FrameLayout,
+        bannerSize: AdSize = AdSize.BANNER,
         listener: (Boolean) -> Unit = {}
     ) {
 
-        val adView = AdView(context)
-        adView.setAdSize(AdSize.BANNER)
+        val adView = AdView(activity)
+
+        adView.setAdSize(bannerSize)
         adView.adUnitId = adId
 
         adView.adListener = object : AdListener() {
@@ -51,6 +56,7 @@ class AdmobBannerAd {
             }
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.i("LoadBannerAd", "onAdFailedToLoad: ${adError.message}")
                 listener.invoke(false)
             }
 
@@ -59,6 +65,8 @@ class AdmobBannerAd {
             }
 
             override fun onAdLoaded() {
+                Log.i("LoadBannerAd", "onAdLoaded: Banner Loaded")
+
                 listener.invoke(true)
                 container.removeAllViews()
                 container.addView(adView)

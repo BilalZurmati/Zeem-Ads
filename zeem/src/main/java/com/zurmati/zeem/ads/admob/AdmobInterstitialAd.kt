@@ -2,6 +2,8 @@ package com.zurmati.zeem.ads.admob
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -12,6 +14,7 @@ import com.zurmati.zeem.ads.managers.AdsManager
 import com.zurmati.zeem.billing.GoogleBilling
 import com.zurmati.zeem.enums.InterstitialDismiss
 import com.zurmati.zeem.extensions.logEvent
+import com.zurmati.zeem.utils.Utils
 
 class AdmobInterstitialAd {
     private var mInterstitialAd: InterstitialAd? = null
@@ -56,9 +59,10 @@ class AdmobInterstitialAd {
         dismissType: InterstitialDismiss,
         listener: (Boolean) -> Unit = {}
     ) {
+        Utils.showLoadingDialog(activity)
         mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdClicked() {
-                logEvent("InterstitialAdClicked")
+                logEvent("InterstitialClicked")
             }
 
             override fun onAdDismissedFullScreenContent() {
@@ -69,6 +73,7 @@ class AdmobInterstitialAd {
 
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 super.onAdFailedToShowFullScreenContent(p0)
+                mInterstitialAd = null
                 listener.invoke(false)
             }
 
@@ -76,7 +81,7 @@ class AdmobInterstitialAd {
                 if (dismissType == InterstitialDismiss.ON_IMPRESSION)
                     listener.invoke(true)
 
-                logEvent("InterstitialAdImpression")
+                logEvent("InterstitialImpression")
 
             }
 
@@ -84,8 +89,12 @@ class AdmobInterstitialAd {
             }
         }
 
-        if (mInterstitialAd != null) {
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            Utils.dismissLoadingDialog()
             mInterstitialAd?.show(activity)
-        }
+        }, 1300)
+
+
     }
 }

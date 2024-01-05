@@ -4,8 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.FrameLayout
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
+import com.zurmati.zeem.ads.admob.UMP
 import com.zurmati.zeem.billing.GoogleBilling
+import com.zurmati.zeem.enums.BANNER
 import com.zurmati.zeem.enums.InterstitialDismiss
 import com.zurmati.zeem.enums.Layout
 import com.zurmati.zeem.interfaces.IAdEventListener
@@ -17,6 +20,10 @@ object AdsManager {
     var adData = AdData()
     private var backInterstitialFlag = false
     private var landingInterstitialFlag = true
+
+
+    fun checkConsent(activity: Activity) = UMP.checkConsent(activity)
+
 
     fun initAdManager(activity: Activity, listener: IAdEventListener?) {
         if (GoogleBilling.isPremiumUser())
@@ -44,6 +51,7 @@ object AdsManager {
             admobManager.checkNativeInstances(context)
         }
     }
+
 
 
     private fun cappingMatched(): Boolean {
@@ -93,7 +101,7 @@ object AdsManager {
 
     fun showInterstitialAdOnBack(
         activity: Activity,
-        dismiss: InterstitialDismiss,
+        dismiss: InterstitialDismiss = InterstitialDismiss.ON_CLOSE,
         listener: (Boolean) -> Unit = {}
     ) {
         if (!backInterstitialFlag) {
@@ -108,8 +116,18 @@ object AdsManager {
     }
 
 
-    fun loadBannerAd(context: Context, container: FrameLayout, listener: (Boolean) -> Unit = {}) {
-        admobManager.loadBannerAd(context, container, listener)
+    fun loadBannerAd(
+        activity: Activity,
+        container: FrameLayout,
+        banner: BANNER = BANNER.STATUS_BAR_SIZE,
+        listener: (Boolean) -> Unit = {}
+    ) {
+        val adSize = if (banner == BANNER.STATUS_BAR_SIZE)
+            AdSize.BANNER
+        else
+            AdSize.LARGE_BANNER
+
+        admobManager.loadBannerAd(activity, container, adSize, listener)
     }
 
     fun clearInstances() {
