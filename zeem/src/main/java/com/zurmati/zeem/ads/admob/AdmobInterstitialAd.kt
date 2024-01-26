@@ -21,6 +21,8 @@ class AdmobInterstitialAd {
     private var interstitialAdLoading: Boolean = false
     private var interstitialCounter = 0
 
+    var interstitialShowing = false
+
     private var adRequest = AdRequest.Builder().build()
 
 
@@ -67,6 +69,7 @@ class AdmobInterstitialAd {
 
             override fun onAdDismissedFullScreenContent() {
                 mInterstitialAd = null
+                interstitialShowing = false
                 if (dismissType == InterstitialDismiss.ON_CLOSE)
                     listener.invoke(true)
             }
@@ -74,6 +77,7 @@ class AdmobInterstitialAd {
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 super.onAdFailedToShowFullScreenContent(p0)
                 mInterstitialAd = null
+                interstitialShowing = false
                 listener.invoke(false)
             }
 
@@ -92,8 +96,9 @@ class AdmobInterstitialAd {
 
         Handler(Looper.getMainLooper()).postDelayed({
             Utils.dismissLoadingDialog()
+            interstitialShowing = true
             mInterstitialAd?.show(activity)
-        }, 1300)
+        }, 1500)
 
 
     }

@@ -55,6 +55,9 @@ class AdmobManager {
     fun isInterstitialAdAvailable(): Boolean =
         interstitialAd1.isAdAvailable() || interstitialAd2.isAdAvailable()
 
+    fun isInterstitialShowing(): Boolean =
+        interstitialAd1.interstitialShowing || interstitialAd2.interstitialShowing
+
     fun showInterstitialAd(
         activity: Activity,
         dismiss: InterstitialDismiss,
@@ -91,7 +94,13 @@ class AdmobManager {
         bannerSize: AdSize = AdSize.BANNER,
         listener: (Boolean) -> Unit = {}
     ) {
-        bannerAd.loadFreshBanner(activity, AdsManager.adData.bannerId, container,bannerSize, listener)
+        bannerAd.loadFreshBanner(
+            activity,
+            AdsManager.adData.bannerId,
+            container,
+            bannerSize,
+            listener
+        )
     }
 
 }

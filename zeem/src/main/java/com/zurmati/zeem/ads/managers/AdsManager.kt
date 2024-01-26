@@ -1,17 +1,20 @@
 package com.zurmati.zeem.ads.managers
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.FrameLayout
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.MobileAds
+import com.zurmati.zeem.ads.admob.AdmobAppOpen
 import com.zurmati.zeem.ads.admob.UMP
 import com.zurmati.zeem.billing.GoogleBilling
 import com.zurmati.zeem.enums.BANNER
 import com.zurmati.zeem.enums.InterstitialDismiss
 import com.zurmati.zeem.enums.Layout
 import com.zurmati.zeem.interfaces.IAdEventListener
+import com.zurmati.zeem.interfaces.IResumeListener
 import com.zurmati.zeem.models.AdData
 
 object AdsManager {
@@ -21,15 +24,22 @@ object AdsManager {
     private var backInterstitialFlag = false
     private var landingInterstitialFlag = true
 
+    private var sdkInitialized = false
+    var resumeListener: IResumeListener? = null
 
+
+    /**
+     * Make sure to call this method on Dashboard so that we collect user consent.
+     */
     fun checkConsent(activity: Activity) = UMP.checkConsent(activity)
 
 
     fun initAdManager(activity: Activity, listener: IAdEventListener?) {
-        if (GoogleBilling.isPremiumUser())
+        if (GoogleBilling.isPremiumUser() || sdkInitialized)
             return
 
         MobileAds.initialize(activity.applicationContext) {
+            sdkInitialized = true
             admobManager.loadNativeAds(activity) {
                 if (it)
                     listener?.onAdResponse()
@@ -53,21 +63,25 @@ object AdsManager {
     }
 
 
-
-    private fun cappingMatched(): Boolean {
+    private fun cappingMatched(context: Context): Boolean {
         cappingCounter += 1
         Log.i("ZeemLogs", "$cappingCounter")
+        if ((cappingCounter + 1) % adData.clickCapping == 0)
+            admobManager.checkInterstitialInstances(context)
+
         return cappingCounter % adData.clickCapping == 0
     }
 
     fun countInterstitialCapping(context: Context) {
         admobManager.checkInterstitialInstances(context)
-        if (cappingMatched())
+        if (cappingMatched(context))
             backInterstitialFlag = true
     }
 
     fun prefetchingInterstitialAds(context: Context) =
         admobManager.checkInterstitialInstances(context)
+
+    fun isInterstitialShowing(): Boolean = admobManager.isInterstitialShowing()
 
     fun showInterstitialAd(
         activity: Activity,
@@ -85,12 +99,32 @@ object AdsManager {
                 listener.invoke(false)
                 admobManager.checkInterstitialInstances(activity)
             }
-        } else if (!cappingMatched()) {
+        } else if (!cappingMatched(activity)) {
             Log.i("ZeemLogs", "Does not matched")
             listener.invoke(false)
         } else if (admobManager.isInterstitialAdAvailable()) {
             Log.i("ZeemLogs", "interstitial available")
             admobManager.showInterstitialAd(activity, dismiss, listener)
+        } else {
+            Log.i("ZeemLogs", "none")
+            listener.invoke(false)
+            admobManager.checkInterstitialInstances(activity)
+        }
+    }
+
+    fun showLandingInterstitialAd(
+        activity: Activity,
+        dismiss: InterstitialDismiss,
+        listener: (Boolean) -> Unit = {}
+    ) {
+
+        if (!landingInterstitialFlag) {
+            Log.i("ZeemLogs", "First Landing")
+            listener.invoke(false)
+        } else if (admobManager.isInterstitialAdAvailable()) {
+            Log.i("ZeemLogs", "interstitial available")
+            admobManager.showInterstitialAd(activity, dismiss, listener)
+            landingInterstitialFlag = false
         } else {
             Log.i("ZeemLogs", "none")
             listener.invoke(false)
@@ -130,11 +164,17 @@ object AdsManager {
         admobManager.loadBannerAd(activity, container, adSize, listener)
     }
 
+    fun initAppOpen(application: Application, appOpenId: String) {
+        val appOpen = AdmobAppOpen()
+        appOpen.init(application, appOpenId)
+    }
+
     fun clearInstances() {
         admobManager = AdmobManager() // Create a new instance of AdmobManager
         cappingCounter = 0 // Reset the capping counter
         adData = AdData() // Create a new instance of AdData
         backInterstitialFlag = false //Reset the backInterstitialFlag
+        sdkInitialized = false
     }
 
 }

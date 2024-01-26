@@ -57,4 +57,7 @@ dependencies {
 
     implementation("com.google.android.ump:user-messaging-platform:2.1.0") //UMP SDk
 
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.7.0"
+    implementation 'androidx.lifecycle:lifecycle-process:2.7.0'
+
 }

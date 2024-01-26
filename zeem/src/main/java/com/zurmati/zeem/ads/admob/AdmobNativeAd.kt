@@ -185,6 +185,9 @@ class AdmobNativeAd {
 
         container.addView(adLayout)
 
+        if (container.visibility != View.VISIBLE)
+            container.visibility = View.VISIBLE
+
         inflated.invoke(true)
     }
 
