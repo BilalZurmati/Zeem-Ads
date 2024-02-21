@@ -1,8 +1,8 @@
 # Zeem-Ads
 
 **Module Integration:** <br/>
-Here is how we can integrate this ads module into our app
-
+Here is how we can integrate this ads module into our app<br/>
+Project has different branches make sure to download the code from required branch.<br/> <br/> 
 Download **zeem** module from the project and paste it in your project's root folder.<br/><br/>
 In **Settings.Gradle** add this<br/><br/>
 Kotlin DSL:<br/>
