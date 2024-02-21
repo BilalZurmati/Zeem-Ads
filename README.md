@@ -6,24 +6,35 @@ Here is how we can integrate this ads module into our app
 Download **zeem** module from the project and paste it in your project's root folder.<br/><br/>
 In **Settings.Gradle** add this<br/><br/>
 Kotlin DSL:<br/>
-<br/>
 ```
 include(":zeem")
 ```
-<br/>
 
-Grovy:<br/><br/>
+Grovy:<br/>
 ```
 include(':zeem')
 ```
 <br/>
 
-in **App level** gradle<br/><br/>
+in **Project level** gradle add this<br/>
+
+For Grovy:<br/>
+```
+maven { url "https://jitpack.io" }
+```
+For Kotlin DSL:<br/>
+```
+maven { url = uri("https://www.jitpack.io" ) }
+```
+<br/>
+
+
+in **App level** gradle<br/>
 ```
 implementation(project(":zeem"))
 ``` 
 
-<br/>Add this to **Manifest**<br/><br/>
+<br/>Add this to **Manifest**<br/>
 
 ```<meta-data
       android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -68,7 +79,7 @@ Here are Layout Types
 Layout.FULL<br/>
 Layout.SIDE_MEDIA<br/>
 Layout.NO_MEDIA<br/>
-Layout.NO_ICON<br/>
+Layout.SIDE_ICON<br/>
 
 #### Banner Ad
  ```
