@@ -1,79 +1,68 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="135dp"
     android:layout_margin="2dp"
-    app:cardBackgroundColor="#181F1E"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:background="@android:color/transparent">
 
-    <com.google.android.gms.ads.nativead.NativeAdView
-        android:id="@+id/ad_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:background="#181F1E"
-        android:padding="5dp">
+        android:layout_height="135dp"
+        android:background="@android:color/transparent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:background="#181F1E">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ad_app_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:adjustViewBounds="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/RoundedImage" />
 
-            <ImageView
-                android:id="@+id/ad_app_icon"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:adjustViewBounds="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/ad_headline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="#7DE3BE"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ad_app_icon"
+            app:layout_constraintTop_toTopOf="@id/ad_app_icon" />
 
-            <TextView
-                android:id="@+id/ad_headline"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="20dp"
-                android:textColor="#7DE3BE"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ad_app_icon"
-                app:layout_constraintTop_toTopOf="@id/ad_app_icon" />
+        <TextView
+            android:id="@+id/ad"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ad_round"
+            android:gravity="center"
+            android:text="AD"
+            android:textColor="@color/black"
+            android:textSize="4pt"
+            app:layout_constraintStart_toStartOf="@id/ad_headline"
+            app:layout_constraintTop_toBottomOf="@id/ad_headline" />
 
-            <TextView
-                android:id="@+id/ad"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/ad_round"
-                android:gravity="center"
-                android:text="AD"
-                android:textColor="@color/black"
-                android:textSize="4pt"
-                app:layout_constraintStart_toStartOf="@id/ad_headline"
-                app:layout_constraintTop_toBottomOf="@id/ad_headline" />
+        <Button
+            android:id="@+id/ad_call_to_action"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/cta_round"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:backgroundTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ad_headline"
+            app:layout_constraintStart_toEndOf="@id/ad_app_icon" />
 
-            <Button
-                android:id="@+id/ad_call_to_action"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/card_round"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                app:backgroundTint="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/ad_headline"
-                app:layout_constraintStart_toEndOf="@id/ad_app_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.gms.ads.nativead.NativeAdView>
-
-</androidx.cardview.widget.CardView>
+</com.google.android.gms.ads.nativead.NativeAdView>
 
 
 

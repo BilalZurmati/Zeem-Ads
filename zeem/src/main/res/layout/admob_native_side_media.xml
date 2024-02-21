@@ -1,22 +1,23 @@
 <com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="180dp">
+    android:layout_height="180dp"
+    android:background="@android:color/transparent">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_gravity="center"
-        android:background="#FFFFFF"
+        android:background="@android:color/transparent"
         android:minHeight="50dp"
         android:orientation="horizontal"
         android:weightSum="2">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.1">
+            android:layout_weight="0.9">
 
             <com.google.android.gms.ads.nativead.MediaView
                 android:id="@+id/ad_media"
@@ -25,17 +26,27 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/ad"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/ad_round"
+                android:gravity="center"
+                android:text="AD"
+                android:textColor="@color/black"
+                android:textSize="4pt" />
+
+        </RelativeLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.9"
+            android:layout_weight="1.1"
             android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingTop="3dp"
-            android:paddingRight="20dp">
+            android:paddingHorizontal="8dp"
+            android:paddingTop="3dp">
 
             <LinearLayout
                 android:id="@+id/top"
@@ -46,17 +57,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/ad_app_icon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:adjustViewBounds="true"
-                    android:paddingEnd="5dp"
-                    android:paddingBottom="5dp" />
+                    app:shapeAppearance="@style/RoundedImage" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="5dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -65,31 +77,9 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:textColor="#0000FF"
-                        android:textSize="16sp"
+                        android:textColor="#271D56"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/ad_advertiser"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="bottom"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <RatingBar
-                            android:id="@+id/ad_stars"
-                            style="?android:attr/ratingBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:isIndicator="true"
-                            android:numStars="5"
-                            android:stepSize="0.5" />
-                    </LinearLayout>
 
                 </LinearLayout>
             </LinearLayout>
@@ -101,45 +91,26 @@
                 android:layout_below="@id/top"
                 android:ellipsize="end"
                 android:padding="5dp"
+                android:textColor="@color/black"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@id/bottom"
-                app:layout_constraintEnd_toEndOf="@+id/bottom"
+                app:layout_constraintBottom_toTopOf="@id/ad_call_to_action"
+                app:layout_constraintEnd_toEndOf="@+id/ad_call_to_action"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/top" />
 
-
-            <LinearLayout
-                android:id="@+id/bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:orientation="horizontal"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+            <Button
+                android:id="@+id/ad_call_to_action"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/cta_round"
+                android:backgroundTint="#271D56"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <TextView
-                    android:id="@+id/ad_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/ad_store"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:textSize="12sp" />
-
-                <Button
-                    android:id="@+id/ad_call_to_action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.zurmati.zeem.ads.admob
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -38,12 +39,12 @@ class AdmobNativeAd {
     }
 
     private fun loadAd(context: Context, adId: String, listener: (Boolean) -> Unit = {}) {
+        Log.i("PhotoTranslatorLogs", "AdmobNativeAd request")
 
         val adLoader = AdLoader.Builder(context, adId)
             .forNativeAd { ad: NativeAd ->
-                listener.invoke(true)
                 nativeAd = ad
-                nativeLoading = false
+
             }
             .withAdListener(object : AdListener() {
 
@@ -61,6 +62,16 @@ class AdmobNativeAd {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     listener.invoke(false)
                     nativeLoading = false
+                    Log.i("PhotoTranslatorLogs", "AdmobNativeAd Error $adError")
+                }
+
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                    nativeLoading = false
+                    listener.invoke(true)
+                    AdsManager.getNativeLoadListener()?.onAdResponse()
+                    Log.i("PhotoTranslatorLogs", "AdmobNativeAd Loaded")
+
                 }
             }).build()
 
@@ -72,13 +83,13 @@ class AdmobNativeAd {
 
     fun isAdAvailable(): Boolean = nativeAd != null
 
-    fun showNative(
+    fun showAd(
         context: Context,
         container: FrameLayout,
         layout: Layout,
         inflated: (Boolean) -> Unit = {}
     ) {
-        val adLayout = when (layout) {
+        val adView = when (layout) {
             Layout.FULL -> {
                 LayoutInflater.from(context).inflate(R.layout.admob_native_full, null)
             }
@@ -91,87 +102,46 @@ class AdmobNativeAd {
                 LayoutInflater.from(context).inflate(R.layout.admob_native_no_media, null)
             }
 
-            Layout.NO_ICON -> {
-                LayoutInflater.from(context).inflate(R.layout.admob_native_no_icon, null)
+            Layout.SIDE_ICON -> {
+                LayoutInflater.from(context).inflate(R.layout.admob_native_side_icon, null)
+            }
+
+
+        } as NativeAdView
+
+
+
+        when (layout) {
+            Layout.FULL -> {
+                inflateFull(adView, nativeAd)
+            }
+
+            Layout.SIDE_MEDIA -> {
+                inflateSideMedia(adView, nativeAd)
+            }
+
+            Layout.NO_MEDIA -> {
+                inflateNoMedia(adView, nativeAd)
+            }
+
+            Layout.SIDE_ICON -> {
+                inflateSideIcon(adView, nativeAd)
             }
 
 
         }
-
-        val adView = adLayout.findViewById(R.id.ad_view) as NativeAdView
-
-
-
-        if (layout == Layout.FULL) {
-            // Set the media view.
-            adView.mediaView = adView.findViewById(R.id.ad_media)
-
-
-            adView.bodyView = adView.findViewById(R.id.ad_body)
-            adView.priceView = adView.findViewById(R.id.ad_price)
-            adView.starRatingView = adView.findViewById(R.id.ad_stars)
-            adView.storeView = adView.findViewById(R.id.ad_store)
-            adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
-
-        }
-
 
         // Set other ad assets.
         adView.headlineView = adView.findViewById(R.id.ad_headline)
         adView.callToActionView = adView.findViewById(R.id.ad_call_to_action)
-        adView.iconView = adView.findViewById(R.id.ad_app_icon)
 
 
         // The headline and media content are guaranteed to be in every UnifiedNativeAd.
-        (adView.headlineView as TextView).text = nativeAd!!.headline
+        (adView.headlineView as TextView).text = nativeAd?.headline
 
 
-        if (layout == Layout.FULL) {
-
-            adView.mediaView?.let {
-                it.mediaContent = nativeAd!!.mediaContent
-            }
-
-
-            // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
-            // check before trying to display them.
-            nativeAd!!.body?.let {
-                (adView.bodyView as TextView).text = it
-            }
-
-            nativeAd!!.price?.let {
-                (adView.priceView as TextView).text = it
-            } ?: {
-                adView.priceView!!.visibility = View.INVISIBLE
-            }
-
-            nativeAd!!.store?.let {
-                (adView.storeView as TextView).text = it
-            } ?: {
-                adView.storeView!!.visibility = View.INVISIBLE
-            }
-
-            nativeAd!!.starRating?.let {
-                (adView.starRatingView as RatingBar).rating = it.toFloat()
-            }
-
-            nativeAd!!.advertiser.let {
-                (adView.advertiserView as TextView).text = it
-            }
-
-        }
-
-
-
-
-        nativeAd!!.callToAction?.let {
+        nativeAd?.callToAction?.let {
             (adView.callToActionView as Button).text = it
-        }
-
-        nativeAd!!.icon?.let {
-            (adView.iconView as ImageView).setImageDrawable(
-                it.drawable
-            )
         }
 
 
@@ -183,12 +153,106 @@ class AdmobNativeAd {
 //            (it as ViewGroup).removeAllViews()
 //        }
 
-        container.addView(adLayout)
+        container.removeAllViews()
+        container.addView(adView)
 
         if (container.visibility != View.VISIBLE)
             container.visibility = View.VISIBLE
 
+
         inflated.invoke(true)
+
+    }
+
+    private fun inflateSideIcon(adView: NativeAdView, nativeAd: NativeAd?) {
+        // Set the media view.
+        adView.iconView = adView.findViewById(R.id.ad_app_icon)
+
+        nativeAd?.icon?.let {
+            (adView.iconView as ImageView).setImageDrawable(
+                it.drawable
+            )
+        }
+    }
+
+    private fun inflateNoMedia(adView: NativeAdView, nativeAd: NativeAd?) {
+        // Set the media view.
+        adView.iconView = adView.findViewById(R.id.ad_app_icon)
+
+        nativeAd?.icon?.let {
+            (adView.iconView as ImageView).setImageDrawable(
+                it.drawable
+            )
+        }
+    }
+
+    private fun inflateSideMedia(adView: NativeAdView, nativeAd: NativeAd?) {
+        // Set the media view.
+        adView.mediaView = adView.findViewById(R.id.ad_media)
+        adView.iconView = adView.findViewById(R.id.ad_app_icon)
+        adView.bodyView = adView.findViewById(R.id.ad_body)
+
+
+        adView.mediaView?.let {
+            it.mediaContent = nativeAd!!.mediaContent
+        }
+
+        nativeAd?.icon?.let {
+            (adView.iconView as ImageView).setImageDrawable(
+                it.drawable
+            )
+        }
+
+        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+        // check before trying to display them.
+        nativeAd?.body?.let {
+            (adView.bodyView as TextView).text = it
+        }
+
+    }
+
+    private fun inflateFull(adView: NativeAdView, nativeAd: NativeAd?) {
+        // Set the media view.
+        adView.mediaView = adView.findViewById(R.id.ad_media)
+
+
+        adView.bodyView = adView.findViewById(R.id.ad_body)
+        adView.priceView = adView.findViewById(R.id.ad_price)
+        adView.starRatingView = adView.findViewById(R.id.ad_stars)
+        adView.storeView = adView.findViewById(R.id.ad_store)
+        adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
+
+
+        adView.mediaView?.let {
+            it.mediaContent = nativeAd!!.mediaContent
+        }
+
+
+        // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+        // check before trying to display them.
+        nativeAd?.body?.let {
+            (adView.bodyView as TextView).text = it
+        }
+
+        nativeAd?.price?.let {
+            (adView.priceView as TextView).text = it
+        } ?: {
+            adView.priceView!!.visibility = View.INVISIBLE
+        }
+
+        nativeAd?.store?.let {
+            (adView.storeView as TextView).text = it
+        } ?: {
+            adView.storeView!!.visibility = View.INVISIBLE
+        }
+
+        nativeAd?.starRating?.let {
+            (adView.starRatingView as RatingBar).rating = it.toFloat()
+        }
+
+        nativeAd?.advertiser.let {
+            (adView.advertiserView as TextView).text = it
+        }
     }
 
 

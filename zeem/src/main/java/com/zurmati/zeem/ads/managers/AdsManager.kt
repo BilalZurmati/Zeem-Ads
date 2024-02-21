@@ -27,6 +27,8 @@ object AdsManager {
     private var sdkInitialized = false
     var resumeListener: IResumeListener? = null
 
+    private var nativeListener: IAdEventListener? = null
+
 
     /**
      * Make sure to call this method on Dashboard so that we collect user consent.
@@ -34,6 +36,9 @@ object AdsManager {
     fun checkConsent(activity: Activity) = UMP.checkConsent(activity)
 
 
+    /**
+     * Call this method in your apps entry point ( Splash Activity )
+     */
     fun initAdManager(activity: Activity, listener: IAdEventListener?) {
         if (GoogleBilling.isPremiumUser() || sdkInitialized)
             return
@@ -49,6 +54,20 @@ object AdsManager {
         }
     }
 
+
+    /**
+     * If you want real time native ad then make sure to register this listener
+     * This listener will return a method who is going to be called every time a new native AD is loaded.
+     */
+    fun setNativeLoadListener(listener: IAdEventListener) {
+        nativeListener = listener
+    }
+
+    fun getNativeLoadListener(): IAdEventListener? = nativeListener
+
+    /**
+     * Call this method wherever you want to inflate a native ad
+     */
     fun showNativeAd(
         context: Context,
         container: FrameLayout,
@@ -58,6 +77,7 @@ object AdsManager {
         if (admobManager.isNativeAdAvailable()) {
             admobManager.showNativeAd(context, container, layout, inflated)
         } else {
+            inflated.invoke(false)
             admobManager.checkNativeInstances(context)
         }
     }
