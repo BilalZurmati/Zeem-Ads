@@ -36,7 +36,8 @@ implementation(project(":zeem"))
 
 <br/>Add this to **Manifest**<br/>
 
-```<meta-data
+```
+<meta-data
       android:name="com.google.android.gms.ads.APPLICATION_ID"
       android:value="YOUR_ADMOB_APP_ID" />
 ```
@@ -80,6 +81,7 @@ Layout.FULL<br/>
 Layout.SIDE_MEDIA<br/>
 Layout.NO_MEDIA<br/>
 Layout.SIDE_ICON<br/>
+Layout.NO_ICON<br/>
 
 #### Banner Ad
  ```
