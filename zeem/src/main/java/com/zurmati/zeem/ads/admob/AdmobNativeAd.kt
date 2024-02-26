@@ -106,6 +106,10 @@ class AdmobNativeAd {
                 LayoutInflater.from(context).inflate(R.layout.admob_native_side_icon, null)
             }
 
+            Layout.NO_ICON -> {
+                LayoutInflater.from(context).inflate(R.layout.admob_native_no_icon, null)
+            }
+
 
         } as NativeAdView
 
@@ -126,6 +130,10 @@ class AdmobNativeAd {
 
             Layout.SIDE_ICON -> {
                 inflateSideIcon(adView, nativeAd)
+            }
+
+            Layout.NO_ICON -> {
+                inflateNoIcon(adView, nativeAd)
             }
 
 
@@ -164,6 +172,21 @@ class AdmobNativeAd {
 
     }
 
+    private fun inflateNoIcon(adView: NativeAdView, nativeAd: NativeAd?) {
+        // Set the media view.
+        adView.mediaView = adView.findViewById(R.id.ad_media)
+
+        adView.bodyView = adView.findViewById(R.id.ad_body)
+
+
+        adView.mediaView?.let {
+            it.mediaContent = nativeAd!!.mediaContent
+        }
+
+        nativeAd?.body?.let {
+            (adView.bodyView as TextView).text = it
+        }
+    }
     private fun inflateSideIcon(adView: NativeAdView, nativeAd: NativeAd?) {
         // Set the media view.
         adView.iconView = adView.findViewById(R.id.ad_app_icon)
