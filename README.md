@@ -68,7 +68,7 @@ initAdManager(this, this)
 #### Native Ad
 Below method will inflate native ad
  ```
- showNativeAd(context: Context,container: FrameLayout,layout: Layout) {inflated->
+ showNativeAd(context: Context,container: FrameLayout,layout: Layout) { inflated ->
                   returns true if ad is inflated or else it returns false
     }
 ```
@@ -85,14 +85,14 @@ Layout.NO_ICON<br/>
 
 #### Banner Ad
  ```
- loadBannerAd(context: Context, container: FrameLayout) {inflated->
+ loadBannerAd(context: Context, container: FrameLayout) { inflated ->
                   returns true if ad is inflated or else it returns false
     }
 ```
 
 #### Interstitial Ad
  ```
- showInterstitialAd(activity: Activity,dismiss: InterstitialDismiss)  {dismissEvent->
+ showInterstitialAd(activity: Activity,dismiss: InterstitialDismiss)  { dismissEvent ->
                 Do your next event here.
     }
 ```
