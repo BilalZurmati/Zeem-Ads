@@ -90,6 +90,12 @@ Layout.NO_ICON<br/>
     }
 ```
 
+Here are  different types of Banners
+
+BANNER.NORMAL<br/>
+BANNER.COLLAPSE_TOP<br/>
+BANNER.COLLAPSE_BOTTOM<br/>
+
 #### Interstitial Ad
  ```
  showInterstitialAd(activity: Activity,dismiss: InterstitialDismiss)  { dismissEvent ->
