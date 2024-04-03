@@ -3,6 +3,8 @@ package com.zurmati.zeem.ads.managers
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.FrameLayout
 import com.google.android.gms.ads.AdSize
@@ -27,6 +29,8 @@ object AdsManager {
     private var sdkInitialized = false
     var resumeListener: IResumeListener? = null
 
+    var appOpenShownNow = false
+
     private var nativeListener: IAdEventListener? = null
 
 
@@ -39,18 +43,18 @@ object AdsManager {
     /**
      * Call this method in your apps entry point ( Splash Activity )
      */
-    fun initAdManager(activity: Activity, listener: IAdEventListener?) {
+    fun initAdManager(context: Context, listener: IAdEventListener?) {
         if (GoogleBilling.isPremiumUser() || sdkInitialized)
             return
 
-        MobileAds.initialize(activity.applicationContext) {
+        MobileAds.initialize(context.applicationContext) {
             sdkInitialized = true
-            admobManager.loadNativeAds(activity) {
+            admobManager.loadNativeAds(context) {
                 if (it)
                     listener?.onAdResponse()
             }
 
-            prefetchingInterstitialAds(activity)
+            prefetchingInterstitialAds(context)
         }
     }
 
@@ -93,7 +97,11 @@ object AdsManager {
     }
 
     fun countInterstitialCapping(context: Context) {
-        admobManager.checkInterstitialInstances(context)
+        if (appOpenShownNow) {
+            appOpenShownNow = false
+            return
+        }
+
         if (cappingMatched(context))
             backInterstitialFlag = true
     }
@@ -109,6 +117,12 @@ object AdsManager {
         listener: (Boolean) -> Unit = {}
     ) {
         Log.i("ZeemLogs", "showInterstitialAd")
+        if (appOpenShownNow) {
+            appOpenShownNow = false
+            listener.invoke(false)
+            return
+        }
+
         if (landingInterstitialFlag) {
             Log.i("ZeemLogs", "First Landing")
             if (admobManager.isInterstitialAdAvailable()) {
@@ -137,6 +151,11 @@ object AdsManager {
         dismiss: InterstitialDismiss,
         listener: (Boolean) -> Unit = {}
     ) {
+        if (appOpenShownNow) {
+            appOpenShownNow = false
+            listener.invoke(false)
+            return
+        }
 
         if (!landingInterstitialFlag) {
             Log.i("ZeemLogs", "First Landing")
@@ -158,14 +177,32 @@ object AdsManager {
         dismiss: InterstitialDismiss = InterstitialDismiss.ON_CLOSE,
         listener: (Boolean) -> Unit = {}
     ) {
+
+        //in order to avoid app open and interstitial AD one after other, we need to ignore that condition
+        if (appOpenShownNow) {
+            appOpenShownNow = false
+            listener.invoke(false)
+            return
+        }
+
         if (!backInterstitialFlag) {
             listener.invoke(false)
         } else if (admobManager.isInterstitialAdAvailable()) {
-            backInterstitialFlag = false
-            admobManager.showInterstitialAd(activity, dismiss, listener)
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                backInterstitialFlag = false
+                admobManager.showInterstitialAd(activity, dismiss, listener)
+            }, 400)
+
         } else {
             listener.invoke(false)
             admobManager.checkInterstitialInstances(activity)
+        }
+    }
+
+    fun checkIntegration(context: Context) {
+        MobileAds.openAdInspector(context) { error ->
+            // Error will be non-null if ad inspector closed due to an error.
         }
     }
 
@@ -173,15 +210,10 @@ object AdsManager {
     fun loadBannerAd(
         activity: Activity,
         container: FrameLayout,
-        banner: BANNER = BANNER.STATUS_BAR_SIZE,
+        banner: BANNER = BANNER.NORMAL,
         listener: (Boolean) -> Unit = {}
     ) {
-        val adSize = if (banner == BANNER.STATUS_BAR_SIZE)
-            AdSize.BANNER
-        else
-            AdSize.LARGE_BANNER
-
-        admobManager.loadBannerAd(activity, container, adSize, listener)
+        admobManager.loadBannerAd(activity, container, banner, listener)
     }
 
     fun initAppOpen(application: Application, appOpenId: String) {
@@ -195,6 +227,7 @@ object AdsManager {
         adData = AdData() // Create a new instance of AdData
         backInterstitialFlag = false //Reset the backInterstitialFlag
         sdkInitialized = false
+        appOpenShownNow = false
     }
 
 }

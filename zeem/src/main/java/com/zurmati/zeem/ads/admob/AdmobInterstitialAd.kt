@@ -27,7 +27,7 @@ class AdmobInterstitialAd {
 
 
     fun loadFreshInterstitial(context: Context, adId: String, listener: (Boolean) -> Unit = {}) {
-        if (GoogleBilling.isPremiumUser() || interstitialAdLoading || interstitialCounter >= AdsManager.adData.interstitialRequests)
+        if (!Utils.isOnline(context) ||GoogleBilling.isPremiumUser() || interstitialAdLoading || interstitialCounter >= AdsManager.adData.interstitialRequests)
             return
 
         loadAd(context, adId, listener)

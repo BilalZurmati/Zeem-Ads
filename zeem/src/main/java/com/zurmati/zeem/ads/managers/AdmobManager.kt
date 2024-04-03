@@ -8,6 +8,7 @@ import com.google.android.gms.ads.AdSize
 import com.zurmati.zeem.ads.admob.AdmobBannerAd
 import com.zurmati.zeem.ads.admob.AdmobInterstitialAd
 import com.zurmati.zeem.ads.admob.AdmobNativeAd
+import com.zurmati.zeem.enums.BANNER
 import com.zurmati.zeem.enums.InterstitialDismiss
 import com.zurmati.zeem.enums.Layout
 
@@ -87,7 +88,7 @@ class AdmobManager {
     fun loadBannerAd(
         activity: Activity,
         container: FrameLayout,
-        bannerSize: AdSize = AdSize.BANNER,
+        bannerSize: BANNER = BANNER.NORMAL,
         listener: (Boolean) -> Unit = {}
     ) {
         bannerAd.loadFreshBanner(

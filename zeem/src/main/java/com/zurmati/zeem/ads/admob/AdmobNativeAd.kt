@@ -1,6 +1,8 @@
 package com.zurmati.zeem.ads.admob
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,7 @@ import com.zurmati.zeem.ads.managers.AdsManager
 import com.zurmati.zeem.billing.GoogleBilling
 import com.zurmati.zeem.enums.Layout
 import com.zurmati.zeem.extensions.logEvent
+import com.zurmati.zeem.utils.Utils
 
 class AdmobNativeAd {
 
@@ -32,7 +35,7 @@ class AdmobNativeAd {
 
 
     fun loadFreshNative(context: Context, adId: String, listener: (Boolean) -> Unit = {}) {
-        if (GoogleBilling.isPremiumUser() || nativeLoading || nativeCounter >= AdsManager.adData.nativeRequest)
+        if (!Utils.isOnline(context) || GoogleBilling.isPremiumUser() || nativeLoading || nativeCounter >= AdsManager.adData.nativeRequest)
             return
 
         loadAd(context, adId, listener)
@@ -150,6 +153,10 @@ class AdmobNativeAd {
 
         nativeAd?.callToAction?.let {
             (adView.callToActionView as Button).text = it
+
+            (adView.callToActionView as Button).setTextColor(Color.parseColor("#${AdsManager.adData.CtaTextColor}"))
+            (adView.callToActionView as Button).backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#${AdsManager.adData.CtaColor}"))
         }
 
 
@@ -187,6 +194,7 @@ class AdmobNativeAd {
             (adView.bodyView as TextView).text = it
         }
     }
+
     private fun inflateSideIcon(adView: NativeAdView, nativeAd: NativeAd?) {
         // Set the media view.
         adView.iconView = adView.findViewById(R.id.ad_app_icon)

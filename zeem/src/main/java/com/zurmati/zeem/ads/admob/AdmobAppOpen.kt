@@ -14,6 +14,7 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.zurmati.zeem.ads.managers.AdsManager
+import com.zurmati.zeem.ads.managers.AdsManager.appOpenShownNow
 import com.zurmati.zeem.ads.managers.AdsManager.resumeListener
 import java.util.Date
 
@@ -95,6 +96,7 @@ class AdmobAppOpen : Application.ActivityLifecycleCallbacks {
                 // Set the reference to null so isAdAvailable() returns false.
                 appOpenAd = null
                 isShowingAd = false
+                appOpenShownNow = true
 
                 //                    onShowAdCompleteListener.onShowAdComplete()
                 loadAd(activity)

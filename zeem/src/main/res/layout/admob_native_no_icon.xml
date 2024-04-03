@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="#7DE3BE"
+                    android:textColor="@color/ad_headline_color"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -83,7 +83,8 @@
                 android:background="@drawable/cta_round"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="14sp"
+                android:textStyle="bold"
                 app:backgroundTint="@color/black" />
 
 
