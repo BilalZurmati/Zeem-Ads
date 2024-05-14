@@ -87,19 +87,27 @@ class AdmobBannerAd {
         } else {
             //collapseAbleBanner
             adView.setAdSize(getAdSize(activity, container))
-            val extras = Bundle()
-
-            if (size == BANNER.COLLAPSE_TOP)
-                extras.putString("collapsible", "top")
-            else
-                extras.putString("collapsible", "bottom")
 
 
-            extras.putString("collapsible_request_id", UUID.randomUUID().toString())
+            if (size == BANNER.ADAPTIVE) {
+                AdRequest.Builder().build()
+            } else {
+                val extras = Bundle()
 
-            AdRequest.Builder()
-                .addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
-                .build()
+                if (size == BANNER.COLLAPSE_TOP)
+                    extras.putString("collapsible", "top")
+                else
+                    extras.putString("collapsible", "bottom")
+
+
+                extras.putString("collapsible_request_id", UUID.randomUUID().toString())
+
+                AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter::class.java, extras)
+                    .build()
+            }
+
+
         }
 
         adView.loadAd(adRequest)
