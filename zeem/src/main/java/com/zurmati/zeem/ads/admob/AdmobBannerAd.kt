@@ -84,7 +84,8 @@ class AdmobBannerAd {
             adView.setAdSize(AdSize.BANNER)
             AdRequest.Builder().build()
 
-        } else {
+        }
+        else {
             //collapseAbleBanner
             adView.setAdSize(getAdSize(activity, container))
 
