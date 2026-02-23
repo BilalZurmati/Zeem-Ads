@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Zeem</string>
+    <string name="thank_you_message">Thank you for choosing our app! you are now premium user, enjoy using premium version of the app.</string>
+    <string name="_ok">Ok</string>
+    <string name="loading_ad">Loading Ad..</string>
+    <string name="the_next_ad">The next ad will support this developer\nto improve this product more</string>
+
+</resources>
