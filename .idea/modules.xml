@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Zeem.iml" filepath="$PROJECT_DIR$/.idea/Zeem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Zeem.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Zeem.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Zeem.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Zeem.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Zeem.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Zeem.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Zeem.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Zeem.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zeem/Zeem.zeem.iml" filepath="$PROJECT_DIR$/.idea/modules/zeem/Zeem.zeem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zeem/Zeem.zeem.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/zeem/Zeem.zeem.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zeem/Zeem.zeem.main.iml" filepath="$PROJECT_DIR$/.idea/modules/zeem/Zeem.zeem.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zeem/Zeem.zeem.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/zeem/Zeem.zeem.unitTest.iml" />
+    </modules>
+  </component>
+</project>

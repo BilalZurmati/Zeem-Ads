@@ -1,0 +1,27 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.zurmati.zeem" >
+4
+5    <uses-sdk android:minSdkVersion="1" />
+6
+7    <uses-permission android:name="android.permission.INTERNET" />
+7-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:4:5-67
+7-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:4:22-64
+8
+9    <application>
+9-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:6:5-15:19
+10        <meta-data
+10-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:7:9-9:36
+11            android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
+11-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:8:13-83
+12            android:value="true" />
+12-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:9:13-33
+13        <meta-data
+13-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:11:9-13:36
+14            android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
+14-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:12:13-79
+15            android:value="true" />
+15-->C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:13:13-33
+16    </application>
+17
+18</manifest>

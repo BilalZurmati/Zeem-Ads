@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ad_headline_color">#7DE3BE</color>
+    <color name="black">#FF000000</color>
+    <color name="gray">#5D5D5E</color>
+    <color name="gray_dark">#3C3C3C</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="_ok">Ok</string>
+    <string name="app_name">Zeem</string>
+    <string name="loading_ad">Loading Ad..</string>
+    <string name="thank_you_message">Thank you for choosing our app! you are now premium user, enjoy using premium version of the app.</string>
+    <string name="the_next_ad">The next ad will support this developer\nto improve this product more</string>
+    <style name="Base.Theme.Zeem" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        
+    </style>
+    <style name="RoundedImage" parent="">
+        <item name="cornerSize">15%</item>
+    </style>
+    <style name="Theme.Zeem" parent="Base.Theme.Zeem"/>
+</resources>

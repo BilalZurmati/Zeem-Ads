@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.AliAsadi.expandable-recycler-view:expandablerecyclerview:1.8@aar" external-system-id="GRADLE">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/8.11.1/transforms/865382b53e2c3b1abffa4bb46bae89df/transformed/expandablerecyclerview-1.8/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/8.11.1/transforms/865382b53e2c3b1abffa4bb46bae89df/transformed/expandablerecyclerview-1.8/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.11.1/transforms/865382b53e2c3b1abffa4bb46bae89df/transformed/expandablerecyclerview-1.8/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.AliAsadi.expandable-recycler-view/expandablerecyclerview/1.8/409bf56c26a7b4266db7a5489df83c7bec52426e/expandablerecyclerview-1.8-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

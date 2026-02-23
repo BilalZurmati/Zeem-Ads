@@ -1,0 +1,34 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:2:1-17:12
+	package
+		INJECTED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:4:5-67
+	android:name
+		ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:4:22-64
+application
+ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:6:5-15:19
+meta-data#com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION
+ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:7:9-9:36
+	android:value
+		ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:9:13-33
+	android:name
+		ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:8:13-83
+meta-data#com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING
+ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:11:9-13:36
+	android:value
+		ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:13:13-33
+	android:name
+		ADDED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml:12:13-79
+uses-sdk
+INJECTED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml
+INJECTED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\HP\AndroidStudioProjects\Zeem\zeem\src\main\AndroidManifest.xml
