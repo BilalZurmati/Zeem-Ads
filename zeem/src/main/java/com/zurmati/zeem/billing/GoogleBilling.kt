@@ -140,10 +140,7 @@ class GoogleBilling {
             billingClient?.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(mBillingResult: BillingResult) {
 
-                    val billingResult =
-                        billingClient?.isFeatureSupported(BillingClient.FeatureType.PRODUCT_DETAILS)
-
-                    if (mBillingResult.responseCode == BillingClient.BillingResponseCode.OK && billingResult?.responseCode == BillingClient.BillingResponseCode.OK) {
+                    if (mBillingResult.responseCode == BillingClient.BillingResponseCode.OK) {
 
 
                         CoroutineScope(Dispatchers.IO).launch {
@@ -290,47 +287,36 @@ class GoogleBilling {
             }
 
 
-            val billingResult =
-                billingClient?.isFeatureSupported(BillingClient.FeatureType.PRODUCT_DETAILS)
-            if (billingResult?.responseCode == BillingClient.BillingResponseCode.OK) {
+            Log.i("PremiumFlow", "launchPurchaseFlow: ${getProductDetails(subscription)}")
 
-                Log.i("PremiumFlow", "launchPurchaseFlow: ${getProductDetails(subscription)}")
-
-                getProductDetails(subscription)?.let {
-                    val productDetailsParamsList = listOf(
-                        BillingFlowParams.ProductDetailsParams.newBuilder()
-                            // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
-                            .setProductDetails(it)
-                            // to get an offer token, call ProductDetails.subscriptionOfferDetails()
-                            // for a list of offers that are available to the user
-                            .setOfferToken(it.subscriptionOfferDetails?.get(0)?.offerToken ?: "")
-                            .build()
-                    )
-
-                    val billingFlowParams = BillingFlowParams.newBuilder()
-                        .setProductDetailsParamsList(productDetailsParamsList)
+            getProductDetails(subscription)?.let {
+                val productDetailsParamsList = listOf(
+                    BillingFlowParams.ProductDetailsParams.newBuilder()
+                        // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
+                        .setProductDetails(it)
+                        // to get an offer token, call ProductDetails.subscriptionOfferDetails()
+                        // for a list of offers that are available to the user
+                        .setOfferToken(it.subscriptionOfferDetails?.get(0)?.offerToken ?: "")
                         .build()
+                )
 
-                    billingClient?.launchBillingFlow(activity, billingFlowParams)
-                } ?: run {
+                val billingFlowParams = BillingFlowParams.newBuilder()
+                    .setProductDetailsParamsList(productDetailsParamsList)
+                    .build()
 
-                    Log.i("PremiumFlow", "launchPurchaseFlow: null product")
+                billingClient?.launchBillingFlow(activity, billingFlowParams)
+            } ?:
+            run {
 
-                    if (isNetworkConnected(activity) && billingClient == null) {
-                        init(activity)
-                    }
+                Log.i("PremiumFlow", "launchPurchaseFlow: null product")
 
-                    Toast.makeText(
-                        activity,
-                        "Unable to launch purchase flow for now, please check your internet connection",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if (isNetworkConnected(activity) && billingClient == null) {
+                    init(activity)
                 }
 
-            } else {
                 Toast.makeText(
                     activity,
-                    "This feature is not supported for your device",
+                    "Unable to launch purchase flow for now, please check your internet connection",
                     Toast.LENGTH_SHORT
                 ).show()
             }
